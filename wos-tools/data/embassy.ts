@@ -1,0 +1,37 @@
+import type { BuildingData } from "./types";
+
+export const embassy: BuildingData = {
+    name: "Embassy",
+    upgrades: [
+        { level: 1, prereqs: { Furnace: 8 }, cost: { wood: 60 }, time: "00:00:02", power: 440 },
+        { level: 2, prereqs: { Furnace: 8 }, cost: { wood: 90 }, time: "00:00:10", power: 836 },
+        { level: 3, prereqs: { Furnace: 8 }, cost: { wood: 400 }, time: "00:01:00", power: 1430 },
+        { level: 4, prereqs: { Furnace: 8 }, cost: { wood: 900, coal: 180 }, time: "00:02:00", power: 2222 },
+        { level: 5, prereqs: { Furnace: 8 }, cost: { wood: 3800, coal: 760 }, time: "00:06:40", power: 3410 },
+        { level: 6, prereqs: { Furnace: 8 }, cost: { wood: 9600, coal: 1900, iron: 480 }, time: "00:13:20", power: 5192 },
+        { level: 7, prereqs: { Furnace: 8 }, cost: { wood: 34000, coal: 6900, iron: 1700 }, time: "00:25:00", power: 7766 },
+        { level: 8, prereqs: { Furnace: 8 }, cost: { wood: 63000, coal: 12000, iron: 3100 }, time: "00:45:00", power: 10340 },
+        { level: 9, prereqs: { Furnace: 9 }, cost: { wood: 130000, coal: 26000, iron: 6500 }, time: "02:00:00", power: 12914 },
+        { level: 10, prereqs: { Furnace: 10 }, cost: { wood: 230000, coal: 46000, iron: 11000 }, time: "03:57:30", power: 16654 },
+        { level: 11, prereqs: { Furnace: 11 }, cost: { wood: 260000, coal: 260000, iron: 52000, meat: 13000 }, time: "04:57:00", power: 20394 },
+        { level: 12, prereqs: { Furnace: 12 }, cost: { wood: 330000, coal: 330000, iron: 67000, meat: 16000 }, time: "05:56:00", power: 24134 },
+        { level: 13, prereqs: { Furnace: 13 }, cost: { wood: 470000, coal: 470000, iron: 95000, meat: 23000 }, time: "07:15:30", power: 30448 },
+        { level: 14, prereqs: { Furnace: 14 }, cost: { wood: 630000, coal: 630000, iron: 120000, meat: 31000 }, time: "09:14:00", power: 36762 },
+        { level: 15, prereqs: { Furnace: 15 }, cost: { wood: 930000, coal: 930000, iron: 180000, meat: 46000 }, time: "11:52:30", power: 43076 },
+        { level: 16, prereqs: { Furnace: 16 }, cost: { wood: 1100000, coal: 1100000, iron: 230000, meat: 59000 }, time: "20:07:00", power: 51964 },
+        { level: 17, prereqs: { Furnace: 17 }, cost: { wood: 1800000, coal: 1800000, iron: 370000, meat: 93000 }, time: "1d 00:08:00", power: 60852 },
+        { level: 18, prereqs: { Furnace: 18 }, cost: { wood: 2500000, coal: 2500000, iron: 500000, meat: 120000 }, time: "1d 04:58:00", power: 69740 },
+        { level: 19, prereqs: { Furnace: 19 }, cost: { wood: 3100000, coal: 3100000, iron: 620000, meat: 150000 }, time: "1d 19:27:00", power: 82368 },
+        { level: 20, prereqs: { Furnace: 20 }, cost: { wood: 4300000, coal: 4300000, iron: 860000, meat: 210000 }, time: "2d 06:19:00", power: 94996 },
+        { level: 21, prereqs: { Furnace: 21 }, cost: { wood: 5400000, coal: 5400000, iron: 1000000, meat: 270000 }, time: "2d 22:36:00", power: 107624 },
+        { level: 22, prereqs: { Furnace: 22 }, cost: { wood: 7200000, coal: 7200000, iron: 1400000, meat: 360000 }, time: "4d 09:55:00", power: 126566 },
+        { level: 23, prereqs: { Furnace: 23 }, cost: { wood: 8900000, coal: 8900000, iron: 1700000, meat: 440000 }, time: "6d 04:17:00", power: 145508 },
+        { level: 24, prereqs: { Furnace: 24 }, cost: { wood: 12000000, coal: 12000000, iron: 2400000, meat: 600000 }, time: "8d 15:36:00", power: 164450 },
+        { level: 25, prereqs: { Furnace: 25 }, cost: { wood: 16000000, coal: 16000000, iron: 3200000, meat: 810000 }, time: "12d 02:38:00", power: 183392 },
+        { level: 26, prereqs: { Furnace: 26 }, cost: { wood: 21000000, coal: 21000000, iron: 4200000, meat: 1000000 }, time: "13d 22:14:00", power: 211222 },
+        { level: 27, prereqs: { Furnace: 27 }, cost: { wood: 29000000, coal: 29000000, iron: 5900000, meat: 1400000 }, time: "16d 17:05:00", power: 239052 },
+        { level: 28, prereqs: { Furnace: 28 }, cost: { wood: 39000000, coal: 39000000, iron: 7900000, meat: 1900000 }, time: "19d 05:15:00", power: 266882 },
+        { level: 29, prereqs: { Furnace: 29 }, cost: { wood: 49000000, coal: 49000000, iron: 9800000, meat: 2400000 }, time: "22d 02:26:00", power: 294712 },
+        { level: 30, prereqs: { Furnace: 30 }, cost: { wood: 60000000, coal: 60000000, iron: 12000000, meat: 3000000 }, time: "26d 12:32:00", power: 335170 },
+    ]
+};

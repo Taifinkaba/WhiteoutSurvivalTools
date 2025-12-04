@@ -1,19 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import type { ResourceCost, BuildingData } from "../data/types";
+import type { ResourceCost, BuildingData, CalcResult } from "../data/types";
 import { calculateUpgradeResources } from "../utils/calculateUpgrades";
-import LevelSelector from "./LevelSelector";
 import ResourceInput from "./ResourceInput";
+import LevelSelector from "./LevelSelector";
 import UpgradeResults from "./UpgradeResults";
 
 interface Props {
     building: BuildingData;
-}
-
-export interface CalcResult {
-    resources: ResourceCost;
-    buildings: { name: string; from: number; to: number }[];
 }
 
 export default function UpgradesCalculator({ building }: Props) {
@@ -24,14 +19,18 @@ export default function UpgradesCalculator({ building }: Props) {
 
     const handleCalculate = () => {
         const buildingMap = new Map<string, { from: number; to: number }>();
+
+        // Pass the main building's current level as baseline for prerequisites
         const neededResources = calculateUpgradeResources(
             building,
             currentLevel,
             targetLevel,
             ownedResources,
-            buildingMap
+            buildingMap,
+            currentLevel
         );
 
+        // Convert buildingMap to an array for display
         const buildingList = Array.from(buildingMap.entries()).map(([name, levels]) => ({
             name,
             from: levels.from,

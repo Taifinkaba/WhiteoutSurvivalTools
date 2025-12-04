@@ -1,4 +1,4 @@
-import type { CalcResult } from "./UpgradesCalculator";
+import type { CalcResult } from "../data/types";
 
 interface Props {
     result: CalcResult;

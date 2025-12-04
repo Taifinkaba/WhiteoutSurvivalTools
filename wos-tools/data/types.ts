@@ -17,3 +17,8 @@ export type BuildingData = {
     name: string;
     upgrades: Upgrade[];
 };
+
+export type CalcResult = {
+    resources: ResourceCost;
+    buildings: { name: string; from: number; to: number }[];
+};

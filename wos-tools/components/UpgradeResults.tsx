@@ -6,11 +6,12 @@ interface Props {
 
 export default function UpgradeResults({ result }: Props) {
     return (
-        <>
-            <div className="bg-gray-700 p-4 rounded mt-4">
-                <h3 className="text-lg font-semibold mb-2">Resources Needed:</h3>
+        <div className="space-y-4">
+            {/* Total Resources */}
+            <div className="bg-gray-700 p-4 rounded">
+                <h3 className="text-lg font-semibold mb-2">Total Resources Needed:</h3>
                 <ul className="list-disc pl-5">
-                    {Object.entries(result.resources).map(([res, amt]) => (
+                    {Object.entries(result.totals).map(([res, amt]) => (
                         <li key={res} className="capitalize">
                             {res}: {amt.toLocaleString()}
                         </li>
@@ -18,16 +19,22 @@ export default function UpgradeResults({ result }: Props) {
                 </ul>
             </div>
 
-            <div className="bg-gray-700 p-4 rounded mt-4">
-                <h3 className="text-lg font-semibold mb-2">Buildings to Upgrade:</h3>
+            {/* Upgrade Steps */}
+            <div className="bg-gray-700 p-4 rounded">
+                <h3 className="text-lg font-semibold mb-2">Upgrade Steps:</h3>
                 <ul className="list-disc pl-5">
-                    {result.buildings.map((b, i) => (
-                        <li key={i}>
-                            {b.name}: Level {b.from} → Level {b.to}
+                    {result.steps.map((step, idx) => (
+                        <li key={idx}>
+                            {step.building} → Level {step.level} |
+                            Power: {step.power.toLocaleString()} |
+                            Cost: {Object.entries(step.cost)
+                                .map(([r, v]) => `${r}: ${v.toLocaleString()}`)
+                                .join(", ")} |
+                            Time: {step.time || "-"}
                         </li>
                     ))}
                 </ul>
             </div>
-        </>
+        </div>
     );
 }

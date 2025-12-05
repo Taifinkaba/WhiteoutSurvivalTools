@@ -18,7 +18,15 @@ export type BuildingData = {
     upgrades: Upgrade[];
 };
 
+export type UpgradeStep = {
+    building: string;
+    level: number;
+    cost: ResourceCost;
+    time: string | null;
+    power: number;
+};
+
 export type CalcResult = {
-    resources: ResourceCost;
-    buildings: { name: string; from: number; to: number }[];
+    steps: UpgradeStep[];
+    totals: ResourceCost;
 };

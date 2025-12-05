@@ -1,4 +1,4 @@
-import type { BuildingData, ResourceCost } from "../data/types";
+import type { BuildingData, ResourceCost, UpgradeStep, CalcResult } from "../data/types";
 import { allBuildings } from "../data/allBuildings";
 
 // Map display names from prereqs to keys in allBuildings
@@ -19,8 +19,9 @@ export const buildingNameMap: Record<string, keyof typeof allBuildings> = {
 };
 
 /**
- * Calculates resources required to upgrade a building including all prerequisites.
- * The mainBuildingLevel only affects the first layer of prerequisites.
+ * Calculates upgrade steps and total resources required for a building,
+ * including prerequisites. The main building's current level acts as
+ * a baseline for prerequisite calculations.
  */
 export function calculateUpgradeResources(
     building: BuildingData,
@@ -28,9 +29,10 @@ export function calculateUpgradeResources(
     targetLevel: number,
     owned: ResourceCost,
     buildingMap: Map<string, { from: number; to: number }> = new Map(),
-    mainBuildingLevel?: number // optional, only set for main building
-): ResourceCost {
-    const accumulated: ResourceCost = {};
+    mainBuildingLevel: number = currentLevel
+): CalcResult {
+    const steps: UpgradeStep[] = [];
+    const totals: ResourceCost = {};
 
     // Update building map
     const existing = buildingMap.get(building.name);
@@ -40,18 +42,26 @@ export function calculateUpgradeResources(
         buildingMap.set(building.name, { from: existing.from, to: targetLevel });
     }
 
-    // Loop through levels
     for (let lvl = currentLevel + 1; lvl <= targetLevel; lvl++) {
         const upgrade = building.upgrades.find((u) => u.level === lvl);
         if (!upgrade) continue;
 
-        // Add direct cost
+        // Add this step
+        steps.push({
+            building: building.name,
+            level: lvl,
+            cost: upgrade.cost,
+            time: upgrade.time,
+            power: upgrade.power,
+        });
+
+        // Add to totals
         for (const [res, amt] of Object.entries(upgrade.cost)) {
             const key = res as keyof ResourceCost;
-            accumulated[key] = (accumulated[key] || 0) + amt;
+            totals[key] = (totals[key] || 0) + amt;
         }
 
-        // Handle prerequisites
+        // Handle prerequisites recursively
         if (upgrade.prereqs) {
             for (const [prereqName, prereqTargetLevel] of Object.entries(upgrade.prereqs)) {
                 const prereqKey = buildingNameMap[prereqName];
@@ -60,38 +70,34 @@ export function calculateUpgradeResources(
                 const prereqBuilding = allBuildings[prereqKey];
                 if (!prereqBuilding) continue;
 
-                // Determine the starting level for the prereq
+                // Start level for prerequisite is max(planned level, main building level)
                 const plannedLevel = buildingMap.get(prereqBuilding.name)?.to ?? 0;
+                const prereqCurrentLevel = Math.max(plannedLevel, mainBuildingLevel);
 
-                // Apply mainBuildingLevel only for the first layer (main building's direct prereqs)
-                const prereqCurrentLevel = mainBuildingLevel !== undefined && building.name === allBuildings.furnace.name
-                    ? Math.max(plannedLevel, mainBuildingLevel)
-                    : Math.max(plannedLevel, 1);
-
-                // Recursive call
-                const prereqResources = calculateUpgradeResources(
+                const prereqResult = calculateUpgradeResources(
                     prereqBuilding,
                     prereqCurrentLevel,
                     prereqTargetLevel,
                     {},
-                    buildingMap
+                    buildingMap,
+                    mainBuildingLevel
                 );
 
-                // Add resources
-                for (const [res, amt] of Object.entries(prereqResources)) {
+                // Merge prerequisite steps and totals
+                steps.push(...prereqResult.steps);
+                for (const [res, amt] of Object.entries(prereqResult.totals)) {
                     const key = res as keyof ResourceCost;
-                    accumulated[key] = (accumulated[key] || 0) + amt;
+                    totals[key] = (totals[key] || 0) + amt;
                 }
             }
         }
     }
 
     // Subtract owned resources
-    const finalNeed: ResourceCost = {};
-    for (const [res, amt] of Object.entries(accumulated)) {
+    for (const [res, amt] of Object.entries(totals)) {
         const key = res as keyof ResourceCost;
-        finalNeed[key] = Math.max(0, amt - (owned[key] || 0));
+        totals[key] = Math.max(0, amt - (owned[key] || 0));
     }
 
-    return finalNeed;
+    return { steps, totals };
 }

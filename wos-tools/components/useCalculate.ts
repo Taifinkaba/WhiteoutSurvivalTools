@@ -16,24 +16,19 @@ export function useCalculate(building: BuildingData) {
             currentLevel,
             targetLevel,
             ownedResources,
-            new Map(),
-            currentLevel,
-            buildingLevels
+            new Map(),        // internal buildingMap
+            buildingLevels    // manual overrides
         );
 
         setResult(calcResult);
     };
 
-    // Convert steps → building ranges
+    // Convert steps → building ranges for display (plain object)
     const buildingMap: Record<string, { from: number; to: number }> = {};
-
     if (result) {
         for (const step of result.steps) {
             if (!buildingMap[step.building]) {
-                buildingMap[step.building] = {
-                    from: step.level - 1,
-                    to: step.level,
-                };
+                buildingMap[step.building] = { from: step.level - 1, to: step.level };
             } else {
                 buildingMap[step.building].to = step.level;
             }

@@ -1,18 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import type { BuildingData, ResourceCost, CalcResult } from "../data/types";
+import type { BuildingData, ResourceCost } from "../data/types";
 import { allBuildings } from "../data/allBuildings";
-import { calculateUpgradeResources } from "../utils/calculateUpgrades";
 import ResourceInput from "./ResourceInput";
 import LevelSelector from "./LevelSelector";
+import { useCalculate } from "./useCalculate";
 import StepsDisplay from "./StepsDisplay";
-
-// Type for the upgrade ranges shown in buildingMap
-interface UpgradeRange {
-    from: number;
-    to: number;
-}
 
 interface Props {
     building: BuildingData;
@@ -23,55 +17,44 @@ export default function UpgradesCalculator({ building }: Props) {
 
     const [currentLevel, setCurrentLevel] = useState(1);
     const [targetLevel, setTargetLevel] = useState(1);
-
-    const [buildingLevels, setBuildingLevels] = useState<Record<string, number>>({});
-    const [ownedResources, setOwnedResources] = useState<ResourceCost>({});
-    const [result, setResult] = useState<CalcResult | null>(null);
-
-    // Prefill optional buildings to match main building current level
-    useEffect(() => {
-        const updatedLevels: Record<string, number> = {};
+    const [buildingLevels, setBuildingLevels] = useState<Record<string, number>>(() => {
+        // Initial state: all optional buildings default to main building's current level
+        const initial: Record<string, number> = {};
         Object.values(allBuildings).forEach((b) => {
-            updatedLevels[b.name] = Math.max(buildingLevels[b.name] ?? 0, currentLevel);
+            initial[b.name] = 1; // will be updated once currentLevel changes
         });
-        setBuildingLevels(updatedLevels);
+        return initial;
+    });
+
+    const [ownedResources, setOwnedResources] = useState<ResourceCost>({});
+
+    // Update optional levels when main building currentLevel changes
+    useEffect(() => {
+        setBuildingLevels((prev) => {
+            const updated: Record<string, number> = {};
+            Object.values(allBuildings).forEach((b) => {
+                // keep manual overrides if higher than currentLevel
+                updated[b.name] = Math.max(prev[b.name] ?? 0, currentLevel);
+            });
+            return updated;
+        });
     }, [currentLevel]);
+
+    const { result, calculate, buildingMap } = useCalculate(building);
 
     const handleLevelChange = (name: string, lvl: number) => {
         setBuildingLevels((prev) => ({ ...prev, [name]: lvl }));
     };
 
     const handleCalculate = () => {
-        const calcResult = calculateUpgradeResources(
-            building,
-            currentLevel,
-            targetLevel,
-            ownedResources,
-            new Map(),         // map is no longer used externally
-            currentLevel,      // baseline
-            buildingLevels     // manual overrides
-        );
-
-        setResult(calcResult);
+        calculate(currentLevel, targetLevel, ownedResources, buildingLevels);
     };
-
-    // Create buildingMap for summary display
-    const buildingMap: Record<string, UpgradeRange> = {};
-    if (result) {
-        for (const step of result.steps) {
-            if (!buildingMap[step.building]) {
-                buildingMap[step.building] = { from: step.level - 1, to: step.level };
-            } else {
-                buildingMap[step.building].to = step.level;
-            }
-        }
-    }
 
     return (
         <div className="bg-gray-800 p-6 rounded-xl shadow-md max-w-3xl mx-auto mt-6 text-white">
             <h2 className="text-2xl font-bold mb-4">{building.name} Upgrade Calculator</h2>
 
-            {/* Current + Target Level Inputs */}
+            {/* Current & Target Level */}
             <div className="grid grid-cols-2 gap-4 mb-4">
                 <LevelSelector
                     building={building}
@@ -94,7 +77,7 @@ export default function UpgradesCalculator({ building }: Props) {
                 />
             </div>
 
-            {/* Optional Building Overrides */}
+            {/* Prerequisite adjustments */}
             <h3 className="text-xl font-semibold mb-2">Adjust Prerequisite Levels (optional)</h3>
             <div className="grid grid-cols-2 gap-4 mb-4">
                 {Object.values(allBuildings).map((b) => (
@@ -110,15 +93,12 @@ export default function UpgradesCalculator({ building }: Props) {
                 ))}
             </div>
 
-            {/* Owned Resources Input */}
+            {/* Owned Resources */}
             <h3 className="text-xl font-semibold mb-2">Your Current Resources</h3>
             <ResourceInput
                 resources={ownedResources}
                 onChange={(res, val) =>
-                    setOwnedResources((prev) => ({
-                        ...prev,
-                        [res]: Number(val) || 0,
-                    }))
+                    setOwnedResources((prev) => ({ ...prev, [res]: Number(val) || 0 }))
                 }
             />
 
@@ -129,10 +109,9 @@ export default function UpgradesCalculator({ building }: Props) {
                 Calculate
             </button>
 
-            {/* Modularized display */}
-            {result && (
-                <StepsDisplay result={result} buildingMap={buildingMap} />
-            )}
+            {/* Steps & Totals */}
+            {result && <StepsDisplay result={result} buildingMap={buildingMap} />}
         </div>
     );
 }
+

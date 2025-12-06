@@ -9,6 +9,7 @@ export default function Navbar() {
 
                     {/* Logo */}
                     <div className="flex items-center">
+                        <Link href="/" className="flex items-center">
                         <Image
                             src="/WOSToolsLogo3.png"
                             alt="WOS Tools Logo"
@@ -17,6 +18,7 @@ export default function Navbar() {
                             className="mr-2"
                         />
                         <span className="text-white font-bold text-2xl">WOS Tools</span>
+                        </Link>
                     </div>
 
                     {/* Desktop Links */}

@@ -3,8 +3,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import type { BuildingData, ResourceCost } from "../data/types";
-import { allBuildings } from "../data/allBuildings";
+import type { BuildingData, ResourceCost } from "../../data/types";
+import { allBuildings } from "../../data/allBuildings";
 import ResourceInput from "./ResourceInput";
 import LevelSelector from "./LevelSelector";
 import { useCalculate } from "./useCalculate";

@@ -1,4 +1,4 @@
-import LevelSelector from "@/components/LevelSelector";
+import LevelSelector from "@/components/Calculator/LevelSelector";
 import type { BuildingData } from "@/data/types";
 
 export default function CurrentTargetSelectors({

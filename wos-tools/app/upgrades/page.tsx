@@ -1,5 +1,5 @@
-import Navbar from "../../components/Navbar";
-import UpgradesCalculator from "../../components/UpgradesCalculator";
+import Navbar from "../../components/Navbar/Navbar";
+import UpgradesCalculator from "../../components/Calculator/UpgradesCalculator";
 import { allBuildings } from "../../data/allBuildings";
 
 export default function Upgrades() {

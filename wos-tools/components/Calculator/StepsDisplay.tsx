@@ -1,4 +1,4 @@
-import type { CalcResult } from "../data/types";
+import type { CalcResult } from "../../data/types";
 
 interface UpgradeRange {
     from: number;

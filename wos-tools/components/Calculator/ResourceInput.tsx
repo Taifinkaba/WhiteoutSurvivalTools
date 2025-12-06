@@ -1,4 +1,4 @@
-import type { ResourceCost } from "../data/types";
+import type { ResourceCost } from "../../data/types";
 
 interface Props {
     resources: ResourceCost;

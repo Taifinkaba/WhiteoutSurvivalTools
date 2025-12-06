@@ -1,4 +1,4 @@
-import type { BuildingData } from "../data/types";
+import type { BuildingData } from "../../data/types";
 
 interface Props {
     building: BuildingData;

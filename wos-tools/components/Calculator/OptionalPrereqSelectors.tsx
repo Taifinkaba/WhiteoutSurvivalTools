@@ -1,4 +1,4 @@
-import LevelSelector from "@/components/LevelSelector";
+import LevelSelector from "@/components/Calculator/LevelSelector";
 import { allBuildings } from "@/data/allBuildings";
 
 export default function OptionalPrereqSelectors({

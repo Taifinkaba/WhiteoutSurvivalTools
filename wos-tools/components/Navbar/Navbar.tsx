@@ -21,7 +21,7 @@ export default function Navbar() {
         <nav className="sticky top-0 z-50" aria-label="Main navigation">
             <SkipToContent />
 
-            <div className="bg-gradient-to-r from-blue-900 via-gray-900 to-purple-900 shadow-lg">
+            <div className="bg-linear-to-r from-blue-900 via-gray-900 to-purple-900 shadow-lg">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between items-center h-20">
                         <Logo />

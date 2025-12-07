@@ -39,16 +39,15 @@ export default function Home() {
         {/* Pages Section */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
 
-          {/* Home Card */}
-          <Link href="/" className="block">
+          {/* Guides Card */}
+          <Link href="/guides" className="block">
             <div className="bg-gray-800 p-6 rounded-xl shadow-md border border-gray-700 
                             hover:scale-[1.02] transition-transform cursor-pointer 
                             flex flex-col h-full max-h-[250px] min-h-[220px] max-w-full
-                            hover:border-blue-400 hover:text-blue-400">
-              <h2 className="text-xl font-semibold mb-2">🏠 Home</h2>
-              <p className="text-gray-400 text-sm group-hover:text-blue-400">
-                Overview of the site, tool updates, and helpful links for new
-                players.
+                            hover:border-green-400 hover:text-green-400">
+              <h2 className="text-xl font-semibold mb-2">📚 Guides</h2>
+              <p className="text-gray-400 text-sm">
+                Explore curated guides, tutorials, and resources to master Whiteout Survival.
               </p>
             </div>
           </Link>
@@ -61,8 +60,7 @@ export default function Home() {
                             hover:border-yellow-400 hover:text-yellow-400">
               <h2 className="text-xl font-semibold mb-2">📊 Building Calculator</h2>
               <p className="text-gray-400 text-sm">
-                Calculate resource costs, power gain, and upgrade requirements
-                instantly.
+                Calculate resource costs, power gain, and upgrade requirements instantly.
               </p>
             </div>
           </Link>

@@ -9,7 +9,7 @@ import SkipToContent from "./SkipToContent";
 
 const navItems: NavItem[] = [
     { label: "Home", href: "/" },
-    { label: "Buildings", href: "/buildings" },
+    { label: "Guides", href: "/guides" },
     { label: "Upgrades", href: "/upgrades" },
     { label: "About", href: "/about" },
 ];

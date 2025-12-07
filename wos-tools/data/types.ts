@@ -1,8 +1,8 @@
 export type ResourceCost = {
+    meat?: number;
     wood?: number;
     coal?: number;
     iron?: number;
-    meat?: number;
 };
 
 export type Upgrade = {

@@ -43,6 +43,25 @@ export const guides: Guide[] = [
     tags: ["whiteout", "official", "general"]
   },
 
+    {
+        title: "Whiteout Survival — Tools & Rewards",
+        resources: [
+            {
+                type: "website",
+                title: "WOS Rewards — Automatic Reward Redeem",
+                url: "https://www.wosrewards.com/",
+                description: "Automatically redeem your Whiteout Survival reward codes quickly and efficiently."
+            },
+            {
+                type: "website",
+                title: "WOS Quackulator — Building Upgrade Calculator",
+                url: "https://quackulator.com/building.php",
+                description: "Calculate the resources and time needed to upgrade buildings in Whiteout Survival efficiently."
+            }
+        ],
+        tags: ["whiteout", "tools", "rewards", "calculator", "building", "misc"]
+    },
+
   {
     title: "Whiteout Survival — Server Age & Timeline Guides",
     resources: [
@@ -143,7 +162,7 @@ export const guides: Guide[] = [
     tags: ["whiteout", "pets"]
   },
 
-    {
+   {
         title: "Whiteout Survival — Video Tutorials",
         resources: [
             {

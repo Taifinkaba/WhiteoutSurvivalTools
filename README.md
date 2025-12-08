@@ -237,3 +237,96 @@ This project follows:
 - TailwindCSS component naming conventions
 
 
+## ⚡ Quick Deployment to Vercel(Incase of 404 error here is how I solved it)
+
+---
+
+## 🛠️ Deploying Whiteout Survival to Vercel
+
+### Problem
+
+Deployments sometimes show a 404 error even when the build completes successfully. This usually happens when your Next.js app is in a **subdirectory** of your repository rather than at the root.
+
+---
+
+### Step 1: Verify Project Structure
+
+Your repository should look like this:
+
+```lua
+repository-root/
+└── wos-tools/          ← Your Next.js app
+    ├── package.json
+    ├── next.config.ts
+    ├── vercel.json      ← will add in next step
+    ├── app/
+    │   └── page.tsx
+    └── ...
+```
+
+> All pages (`/`, `/about`, `/guides`, `/upgrades`) must exist under `app/`.
+
+---
+
+### Step 2: Create `vercel.json`
+
+In the root of your Next.js app (`wos-tools/`), create a file named `vercel.json`:
+
+```json
+{
+  "rewrites": [{ "source": "/(.*)", "destination": "/" }]
+}
+```
+
+> This rewrites all routes to work with Vercel’s routing system.
+
+---
+
+### Step 3: Test Local Build
+
+1. Run the production build:
+
+```bash
+npm run build
+```
+
+2. Start the serve
+
+```bash
+npm start
+```
+
+3. Verify locally that all pages load:
+
+- `/` → homepage  
+- `/about` → about page  
+- `/guides` → guides page  
+- `/upgrades` → upgrades page
+
+---
+
+### Step 4: Set Root Directory in Vercel
+
+1. Go to your Vercel dashboard → **Project → Settings → General**  
+2. Scroll to **Root Directory**  
+3. Enter the name of your subdirectory (e.g., `wos-tools`)  
+4. Save changes
+
+---
+
+### Step 5: Redeploy
+
+- Trigger a redeploy in Vercel.  
+- The build should now complete successfully.
+
+---
+
+### Step 6: Verification
+
+1. Visit your production URL  
+2. Confirm:  
+   - Homepage loads without a 404  
+   - All sub-routes (`/about`, `/guides`, `/upgrades`) are accessible  
+   - Build logs show Next.js compiling successfully
+
+---

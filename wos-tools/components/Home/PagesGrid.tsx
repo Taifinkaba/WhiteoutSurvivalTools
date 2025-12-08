@@ -4,16 +4,16 @@ export default function PagesGrid() {
     return (
         <section
             aria-labelledby="pages-heading"
-            className="max-w-7xl mx-auto px-4"
+            className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16"
         >
             <h2
                 id="pages-heading"
-                className="text-3xl font-bold mb-6 text-center"
+                className="text-3xl sm:text-4xl font-extrabold mb-12 text-center text-white"
             >
                 Explore Our Tools
             </h2>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                 <PageCard
                     title="📚 Guides"
                     description="Explore curated guides, tutorials, and resources to master Whiteout Survival."

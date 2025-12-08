@@ -18,18 +18,27 @@ export default function GuidesPageComponent() {
         .filter((guide) => guide.resources.length > 0);
 
     return (
-        <div className="min-h-screen bg-gray-900 text-white p-4 pt-16 max-w-6xl mx-auto space-y-6">
+        <main
+            id="main-content"
+            className="min-h-screen bg-gray-900 text-white p-4 pt-16 max-w-6xl mx-auto space-y-6"
+        >
             <h1 className="text-3xl font-bold mb-6 text-center">Guides</h1>
 
             <SearchBox value={search} onChange={setSearch} />
 
-            <div className="space-y-6">
+            <section aria-labelledby="guides-heading" className="space-y-6">
+                <h2 id="guides-heading" className="sr-only">
+                    Filtered Guides
+                </h2>
+
                 {filteredGuides.length > 0 ? (
                     filteredGuides.map((guide, idx) => <GuideCard key={idx} guide={guide} />)
                 ) : (
-                    <p className="text-gray-400 text-center">No guides found for "{search}".</p>
+                    <p className="text-gray-400 text-center">
+                        No guides found for "{search}".
+                    </p>
                 )}
-            </div>
-        </div>
+            </section>
+        </main>
     );
 }

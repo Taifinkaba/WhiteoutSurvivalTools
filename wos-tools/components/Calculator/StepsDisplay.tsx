@@ -8,7 +8,7 @@ interface UpgradeRange {
 
 interface Props {
     result: CalcResult;
-    buildingMap: Record<string, UpgradeRange>;
+    buildingMap?: Record<string, UpgradeRange>;
 }
 
 export default function StepsDisplay({ result }: Props) {
@@ -24,7 +24,7 @@ export default function StepsDisplay({ result }: Props) {
         }
     });
 
-    // Group steps by furnace and prereqs
+    // Group steps by Furnace and prerequisites
     const grouped: { furnace: any; prereqs: any[] }[] = [];
     let currentGroup: { furnace: any; prereqs: any[] } | null = null;
 
@@ -39,51 +39,53 @@ export default function StepsDisplay({ result }: Props) {
     });
     if (currentGroup) grouped.push(currentGroup);
 
-    // Calculate totals for Meat, Wood, Coal, Iron
-    let totalMeat = 0;
-    let totalWood = 0;
-    let totalCoal = 0;
-    let totalIron = 0;
-
+    // Calculate totals for all resource types dynamically
+    const totals: Record<string, number> = {};
     result.steps.forEach((step) => {
-        const { cost } = step;
-        totalMeat += cost.meat || 0;
-        totalWood += cost.wood || 0;
-        totalCoal += cost.coal || 0;
-        totalIron += cost.iron || 0;
+        Object.entries(step.cost).forEach(([res, amt]) => {
+            totals[res] = (totals[res] || 0) + amt;
+        });
     });
 
     return (
-        <div className="space-y-4 mt-4">
+        <section aria-labelledby="upgrade-results-heading" className="space-y-6 mt-4">
+            <h2 id="upgrade-results-heading" className="sr-only">
+                Upgrade Calculation Results
+            </h2>
 
             {/* Total Resources */}
-            <div className="bg-gray-700 p-4 rounded">
-                <h3 className="text-lg font-semibold mb-2">Resources Needed:</h3>
+            <section aria-labelledby="total-resources-heading" className="bg-gray-700 p-4 rounded">
+                <h3 id="total-resources-heading" className="text-lg font-semibold mb-2">
+                    Resources Needed
+                </h3>
                 <ul className="list-disc pl-5">
-                    {Object.entries(result.totals).map(([res, amount]) => (
+                    {Object.entries(totals).map(([res, amount]) => (
                         <li key={res} className="capitalize">
-                            {res}: {amount.toLocaleString()}
+                            <span className="font-semibold">{res}</span>: {amount.toLocaleString()}
                         </li>
                     ))}
                 </ul>
-            </div>
+            </section>
 
-            {/* Buildings to Upgrade */}
-            <div className="bg-gray-700 p-4 rounded">
-                <h3 className="text-lg font-semibold mb-2">Buildings to Upgrade:</h3>
+            {/* Buildings Upgrade Range */}
+            <section aria-labelledby="building-range-heading" className="bg-gray-700 p-4 rounded">
+                <h3 id="building-range-heading" className="text-lg font-semibold mb-2">
+                    Buildings to Upgrade
+                </h3>
                 <ul className="list-disc pl-5">
                     {Object.entries(buildingMap).map(([name, { from, to }]) => (
                         <li key={name}>
-                            {name}: Level {from} → Level {to}
+                            <span className="font-semibold">{name}</span>: Level {from} → Level {to}
                         </li>
                     ))}
                 </ul>
-            </div>
+            </section>
 
-            {/* Detailed Steps */}
-            <div className="bg-gray-700 p-4 rounded overflow-x-auto">
-                <h3 className="text-lg font-semibold mb-4">Detailed Steps:</h3>
-
+            {/* Detailed Steps Table */}
+            <section aria-labelledby="detailed-steps-heading" className="bg-gray-700 p-4 rounded overflow-x-auto">
+                <h3 id="detailed-steps-heading" className="text-lg font-semibold mb-4">
+                    Detailed Steps
+                </h3>
                 <table className="min-w-full text-center border-collapse">
                     <thead>
                         <tr className="bg-gray-800 text-white">
@@ -94,14 +96,11 @@ export default function StepsDisplay({ result }: Props) {
                             ))}
                         </tr>
                     </thead>
-
                     <tbody>
                         {grouped.map((group, groupIndex) => (
                             <React.Fragment key={groupIndex}>
-                                {/* Prereqs */}
                                 {group.prereqs.map((step, i) => {
                                     const { cost } = step;
-
                                     return (
                                         <tr key={`pre-${i}`} className="bg-gray-900 text-white">
                                             <td className="p-2 border border-gray-700">{step.building}</td>
@@ -113,12 +112,9 @@ export default function StepsDisplay({ result }: Props) {
                                         </tr>
                                     );
                                 })}
-
-                                {/* Furnace row */}
                                 {group.furnace && (() => {
                                     const step = group.furnace;
                                     const { cost } = step;
-
                                     return (
                                         <tr key={`furn-${groupIndex}`} className="bg-gray-800 text-yellow-300 font-bold">
                                             <td className="p-2 border border-gray-700">{step.building}</td>
@@ -133,18 +129,18 @@ export default function StepsDisplay({ result }: Props) {
                             </React.Fragment>
                         ))}
 
-                        {/* Total row */}
+                        {/* Totals Row */}
                         <tr className="bg-gray-700 text-yellow-200 font-bold">
                             <td className="p-2 border border-gray-700">TOTAL</td>
                             <td className="p-2 border border-gray-700">—</td>
-                            <td className="p-2 border border-gray-700">{totalMeat.toLocaleString()}</td>
-                            <td className="p-2 border border-gray-700">{totalWood.toLocaleString()}</td>
-                            <td className="p-2 border border-gray-700">{totalCoal.toLocaleString()}</td>
-                            <td className="p-2 border border-gray-700">{totalIron.toLocaleString()}</td>
+                            <td className="p-2 border border-gray-700">{totals.meat?.toLocaleString() || 0}</td>
+                            <td className="p-2 border border-gray-700">{totals.wood?.toLocaleString() || 0}</td>
+                            <td className="p-2 border border-gray-700">{totals.coal?.toLocaleString() || 0}</td>
+                            <td className="p-2 border border-gray-700">{totals.iron?.toLocaleString() || 0}</td>
                         </tr>
                     </tbody>
                 </table>
-            </div>
-        </div>
+            </section>
+        </section>
     );
 }

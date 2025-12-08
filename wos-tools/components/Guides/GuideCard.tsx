@@ -7,9 +7,21 @@ interface Props {
 
 export default function GuideCard({ guide }: Props) {
     return (
-        <div className="bg-gray-800 rounded-xl shadow-md p-6 space-y-3 border border-gray-700">
-            <h2 className="text-xl font-semibold">{guide.title}</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+        <section
+            aria-labelledby={`guide-title-${guide.title.replace(/\s+/g, "-").toLowerCase()}`}
+            className="bg-gray-800 rounded-xl shadow-md p-6 space-y-3 border border-gray-700"
+        >
+            <h2
+                id={`guide-title-${guide.title.replace(/\s+/g, "-").toLowerCase()}`}
+                className="text-xl font-semibold"
+            >
+                {guide.title}
+            </h2>
+
+            <div
+                role="list"
+                className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3"
+            >
                 {guide.resources
                     .slice()
                     .sort((a, b) => (b.priority ? -1 : 0) - (a.priority ? -1 : 0))
@@ -17,6 +29,6 @@ export default function GuideCard({ guide }: Props) {
                         <GuideResource key={idx} resource={res} />
                     ))}
             </div>
-        </div>
+        </section>
     );
 }

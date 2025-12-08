@@ -17,13 +17,20 @@ export default function LevelSelector({
     maxLevel,
     onChange,
 }: Props) {
+    const selectId = `level-selector-${building.name.replace(/\s+/g, "-").toLowerCase()}`;
+
     return (
         <div>
-            <label className="block mb-1">{label}</label>
+            {/* Associate label with select using htmlFor */}
+            <label htmlFor={selectId} className="block mb-1 font-medium text-white">
+                {label}
+            </label>
             <select
+                id={selectId}
                 value={value}
                 onChange={(e) => onChange(Number(e.target.value))}
-                className="w-full p-2 rounded bg-gray-700 text-white"
+                className="w-full p-2 rounded bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                aria-label={`${label} level selector`}
             >
                 {building.upgrades
                     .filter((u) => u.level >= minLevel && (!maxLevel || u.level <= maxLevel))

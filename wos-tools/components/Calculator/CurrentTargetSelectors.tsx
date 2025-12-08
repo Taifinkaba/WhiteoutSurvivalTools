@@ -1,6 +1,15 @@
 import LevelSelector from "@/components/Calculator/LevelSelector";
 import type { BuildingData } from "@/data/types";
 
+interface Props {
+    building: BuildingData;
+    maxLevel: number;
+    currentLevel: number;
+    targetLevel: number;
+    setCurrentLevel: (lvl: number) => void;
+    setTargetLevel: (lvl: number) => void;
+}
+
 export default function CurrentTargetSelectors({
     building,
     maxLevel,
@@ -8,7 +17,7 @@ export default function CurrentTargetSelectors({
     targetLevel,
     setCurrentLevel,
     setTargetLevel,
-}: any) {
+}: Props) {
     return (
         <div className="grid grid-cols-2 gap-4 mb-4">
             <LevelSelector
@@ -19,6 +28,7 @@ export default function CurrentTargetSelectors({
                 maxLevel={maxLevel}
                 onChange={(lvl) => {
                     setCurrentLevel(lvl);
+                    // Ensure targetLevel is always >= currentLevel
                     if (lvl > targetLevel) setTargetLevel(lvl);
                 }}
             />

@@ -1,5 +1,3 @@
-//Main Calculator Component
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -20,22 +18,19 @@ export default function UpgradesCalculator({ building }: Props) {
     const [currentLevel, setCurrentLevel] = useState(1);
     const [targetLevel, setTargetLevel] = useState(1);
     const [buildingLevels, setBuildingLevels] = useState<Record<string, number>>(() => {
-        // Initial state: all optional buildings default to main building's current level
         const initial: Record<string, number> = {};
         Object.values(allBuildings).forEach((b) => {
-            initial[b.name] = 1; // will be updated once currentLevel changes
+            initial[b.name] = 1;
         });
         return initial;
     });
 
     const [ownedResources, setOwnedResources] = useState<ResourceCost>({});
 
-    // Update optional levels when main building currentLevel changes
     useEffect(() => {
         setBuildingLevels((prev) => {
             const updated: Record<string, number> = {};
             Object.values(allBuildings).forEach((b) => {
-                // keep manual overrides if higher than currentLevel
                 updated[b.name] = Math.max(prev[b.name] ?? 0, currentLevel);
             });
             return updated;
@@ -53,11 +48,20 @@ export default function UpgradesCalculator({ building }: Props) {
     };
 
     return (
-        <div className="bg-gray-800 p-6 rounded-xl shadow-md max-w-3xl mx-auto mt-6 text-white">
-            <h2 className="text-2xl font-bold mb-4">{building.name} Upgrade Calculator</h2>
+        <section
+            aria-labelledby={`calculator-${building.name.replace(/\s+/g, "-").toLowerCase()}`}
+            className="bg-gray-800 p-6 rounded-xl shadow-md max-w-3xl mx-auto mt-6 text-white"
+        >
+            <h2
+                id={`calculator-${building.name.replace(/\s+/g, "-").toLowerCase()}`}
+                className="text-2xl font-bold mb-4"
+            >
+                {building.name} Upgrade Calculator
+            </h2>
 
             {/* Current & Target Level */}
-            <div className="grid grid-cols-2 gap-4 mb-4">
+            <fieldset className="grid grid-cols-2 gap-4 mb-4">
+                <legend className="sr-only">Select current and target building levels</legend>
                 <LevelSelector
                     building={building}
                     label="Current Level"
@@ -77,43 +81,50 @@ export default function UpgradesCalculator({ building }: Props) {
                     onChange={setTargetLevel}
                     maxLevel={maxLevel}
                 />
-            </div>
+            </fieldset>
 
             {/* Prerequisite adjustments */}
-            <h3 className="text-xl font-semibold mb-2">Adjust Prerequisite Levels (optional)</h3>
-            <div className="grid grid-cols-2 gap-4 mb-4">
-                {Object.values(allBuildings).map((b) => (
-                    <LevelSelector
-                        key={b.name}
-                        building={b}
-                        label={b.name}
-                        value={buildingLevels[b.name] ?? currentLevel}
-                        minLevel={0}
-                        maxLevel={b.upgrades[b.upgrades.length - 1].level}
-                        onChange={(lvl) => handleLevelChange(b.name, lvl)}
-                    />
-                ))}
-            </div>
+            <section aria-labelledby="prereq-heading" className="mb-4">
+                <h3 id="prereq-heading" className="text-xl font-semibold mb-2">
+                    Adjust Prerequisite Levels (optional)
+                </h3>
+                <div className="grid grid-cols-2 gap-4">
+                    {Object.values(allBuildings).map((b) => (
+                        <LevelSelector
+                            key={b.name}
+                            building={b}
+                            label={b.name}
+                            value={buildingLevels[b.name] ?? currentLevel}
+                            minLevel={0}
+                            maxLevel={b.upgrades[b.upgrades.length - 1].level}
+                            onChange={(lvl) => handleLevelChange(b.name, lvl)}
+                        />
+                    ))}
+                </div>
+            </section>
 
             {/* Owned Resources */}
-            <h3 className="text-xl font-semibold mb-2">Your Current Resources</h3>
-            <ResourceInput
-                resources={ownedResources}
-                onChange={(res, val) =>
-                    setOwnedResources((prev) => ({ ...prev, [res]: Number(val) || 0 }))
-                }
-            />
+            <section aria-labelledby="resources-heading" className="mb-4">
+                <h3 id="resources-heading" className="text-xl font-semibold mb-2">
+                    Your Current Resources
+                </h3>
+                <ResourceInput
+                    resources={ownedResources}
+                    onChange={(res, val) =>
+                        setOwnedResources((prev) => ({ ...prev, [res]: Number(val) || 0 }))
+                    }
+                />
+            </section>
 
             <button
                 onClick={handleCalculate}
-                className="bg-blue-600 hover:bg-blue-700 transition px-4 py-2 rounded font-semibold mb-4 w-full"
+                className="bg-blue-600 hover:bg-blue-700 transition px-4 py-2 rounded font-semibold mb-4 w-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-400"
             >
                 Calculate
             </button>
 
             {/* Steps & Totals */}
             {result && <StepsDisplay result={result} buildingMap={buildingMap} />}
-        </div>
+        </section>
     );
 }
-

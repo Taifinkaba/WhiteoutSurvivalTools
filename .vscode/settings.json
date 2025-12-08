@@ -1,0 +1,6 @@
+{
+    "editor.formatOnPaste": true,
+    "editor.formatOnSave": false,
+    "files.autoSave": "afterDelay",
+    "editor.wordWrap": "wordWrapColumn"
+}

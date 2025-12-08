@@ -1,5 +1,4 @@
 import Navbar from "../../components/Navbar/Navbar";
-import AboutIntro from "../../components/About/AboutIntro";
 import FeaturesGrid from "../../components/About/FeaturesGrid";
 import FanSection from "../../components/About/FanSection";
 import FooterInfo from "../../components/About/FooterInfo";

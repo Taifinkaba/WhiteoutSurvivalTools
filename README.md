@@ -7,7 +7,7 @@ A centralized hub for **tools, guides, hero information, event walkthroughs, upg
 ---
 
 ## 🔗 Live Website
-👉 [https://www.wosrewards.com/](https://www.wosrewards.com/)
+👉 [Try it yourself](https://wos-tools.vercel.app/)
 
 ---
 
